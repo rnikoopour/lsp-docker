@@ -95,50 +95,29 @@
         (lsp-register-client client))
     (user-error "No such client %s" server-id)))
 
+
+(defvar lsp-default-clients-list
+  '((dockerfile-ls dockerfilels-docker "docker-langserver --stdio")
+    (bash-ls bashls-docker "bash-language-server start")
+    (gopls gopls-docker "gopls")
+    (pyls pyls-docker "pyls"))
+  "List of clients created when lsp-docker-init-default-clients is invoked")
+
 (cl-defun lsp-docker-init-default-clients (&key
                                            path-mappings
                                            (docker-image-id "yyoncho/lsp-emacs-docker")
                                            (docker-container-name "lsp-container")
                                            (priority 10))
-  (lsp-docker-register-client
-   :server-id 'rls
-   :priority priority
-   :docker-server-id 'rls-docker
-   :docker-image-id docker-image-id
-   :docker-container-name docker-container-name
-   :server-command "rls"
-   :path-mappings path-mappings
-   :launch-server-cmd-fn #'lsp-docker-launch-new-container)
-
-  (lsp-docker-register-client
-   :server-id 'gopls
-   :priority priority
-   :docker-server-id 'gopls-docker
-   :docker-image-id docker-image-id
-   :docker-container-name docker-container-name
-   :server-command "gopls"
-   :path-mappings path-mappings
-   :launch-server-cmd-fn #'lsp-docker-launch-new-container)
-
-  (lsp-docker-register-client
-   :server-id 'pyls
-   :priority priority
-   :docker-server-id 'pyls-docker
-   :docker-image-id docker-image-id
-   :docker-container-name docker-container-name
-   :server-command "pyls"
-   :path-mappings path-mappings
-   :launch-server-cmd-fn #'lsp-docker-launch-new-container)
-
-  (lsp-docker-register-client
-   :server-id 'clangd
-   :priority priority
-   :docker-server-id 'clangd-docker
-   :docker-image-id docker-image-id
-   :docker-container-name docker-container-name
-   :server-command "clangd"
-   :path-mappings path-mappings
-   :launch-server-cmd-fn #'lsp-docker-launch-new-container))
+  (mapcar (lambda (args) "enables clients"
+	    (lsp-docker-register-client
+	     :server-id (nth 0 args)
+	     :priority priority
+	     :docker-server-id (nth 1 args)
+	     :docker-image-id docker-image-id
+	     :docker-container-name docker-container-name
+	     :server-command (nth 2 args)
+	     :path-mappings path-mappings
+	     :launch-server-cmd-fn #'lsp-docker-launch-new-container)) lsp-default-clients-list))
 
 (provide 'lsp-docker)
 ;;; lsp-docker.el ends here
