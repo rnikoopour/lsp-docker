@@ -30,8 +30,9 @@ RUN apk add python3 python3-dev \
 RUN apk add alpine-sdk clang llvm
 COPY --from=ccls /usr/local/bin/ccls /usr/local/bin/ccls
 
-# CSS
-RUN npm install --global vscode-css-languageserver-bin
+# Web Tools
+RUN npm install --global vscode-css-languageserver-bin \
+	vscode-html-languageserver-bin
 
 
 # Download "LLVM source code" and rename the extracted directory to llvm
