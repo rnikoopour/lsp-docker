@@ -27,7 +27,7 @@ RUN apk add python3 python3-dev \
 	&& pip3 install python-language-server[all]
 
 # C-family
-RUN apk add llvm
+RUN apk add alpine-sdk clang llvm
 COPY --from=ccls /usr/local/bin/ccls /usr/local/bin/ccls
 
 
