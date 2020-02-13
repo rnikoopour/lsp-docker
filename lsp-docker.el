@@ -103,7 +103,9 @@
     (bash-ls bashls-docker "bash-language-server start")
     (gopls gopls-docker "gopls")
     (pyls pyls-docker "pyls")
-    (html-ls htmls-docker "html-languageserver --stdio"))
+    (html-ls htmls-docker "html-languageserver --stdio")
+    (ts-ls tsls-docker "typescript-language-server --stdio")
+    (jsts-ls jstsls-docker "typescript-language-server --stdio"))
   "List of clients created when lsp-docker-init-default-clients is invoked")
 
 (cl-defun lsp-docker-init-default-clients (&key

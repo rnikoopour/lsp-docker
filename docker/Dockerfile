@@ -32,7 +32,10 @@ COPY --from=ccls /usr/local/bin/ccls /usr/local/bin/ccls
 
 # Web Tools
 RUN npm install --global vscode-css-languageserver-bin \
-	vscode-html-languageserver-bin
+	vscode-html-languageserver-bin \
+	typescript-language-server \
+	typescript
+
 
 
 # Download "LLVM source code" and rename the extracted directory to llvm
