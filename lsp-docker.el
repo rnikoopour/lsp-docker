@@ -97,7 +97,8 @@
 
 
 (defvar lsp-default-clients-list
-  '((clangd clangd-docker "ccls")
+  '((css-ls cssls-docker "css-languageserver --stdio")
+    (clangd clangd-docker "ccls")
     (dockerfile-ls dockerfilels-docker "docker-langserver --stdio")
     (bash-ls bashls-docker "bash-language-server start")
     (gopls gopls-docker "gopls")
