@@ -1,6 +1,7 @@
 # Emacs Files
 \#*
 *~
+.#*
 
 # Compiled
 *.elc
