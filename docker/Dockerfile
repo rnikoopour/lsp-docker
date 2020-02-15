@@ -1,9 +1,14 @@
-FROM alpine:edge AS ccls
+FROM alpine:edge AS builder
 RUN apk add alpine-sdk cmake make clang clang-static clang-dev llvm-dev llvm-static \
 	&& git clone --depth=1 --recursive https://github.com/MaskRay/ccls \
 	&& cd ccls \
 	&& cmake -H. -BRelease -DCMAKE_BUILD_TYPE=Release \
 	&& cmake --build Release --target install
+
+RUN apk add go make \
+	&& git clone https://github.com/juliosueiras/terraform-lsp \
+	&& cd terraform-lsp \
+	&& make
 
 FROM alpine:edge
 RUN apk update \
@@ -11,8 +16,12 @@ RUN apk update \
 	&& apk add git npm nodejs
 
 # Bash
-RUN apk --no-cache add bash
-RUN npm i -g bash-language-server
+RUN apk --no-cache add bash \
+	&& npm i -g bash-language-server
+
+# C-family
+RUN apk add alpine-sdk clang llvm
+COPY --from=builder /usr/local/bin/ccls /usr/local/bin/ccls
 
 # Docker
 RUN npm i -g dockerfile-language-server-nodejs
@@ -26,22 +35,12 @@ ENV PATH="${PATH}:/root/go/bin"
 RUN apk add python3 python3-dev \
 	&& pip3 install python-language-server[all]
 
-# C-family
-RUN apk add alpine-sdk clang llvm
-COPY --from=ccls /usr/local/bin/ccls /usr/local/bin/ccls
+# Terraform
+COPY --from=builder /terraform-lsp/terraform-lsp /usr/local/bin/terraform-lsp
 
 # Web Tools
-RUN npm install --global vscode-css-languageserver-bin \
+RUN npm i -g vscode-css-languageserver-bin \
 	vscode-html-languageserver-bin \
+	javascript-typescript-langserver \
 	typescript-language-server \
 	typescript
-
-
-
-# Download "LLVM source code" and rename the extracted directory to llvm
-# Download "Clang source code" and rename the extracted directory to llvm/tools/clang
-# cd llvm
-# cmake -H. -BRelease -G Ninja -DCMAKE_BUILD_TYPE=Release -DLLVM_TARGETS_TO_BUILD=X86
-# ninja -C Release clangFormat clangFrontendTool clangIndex clangTooling clang
-
-## Prev 1.8 gigs

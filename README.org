@@ -28,7 +28,9 @@ Docker image + scripts for running =lsp-mode= in =docker= environment.
      | F#                    | [[https://github.com/fsharp/FsAutoComplete][fsautocomplete]]                            |
      | Go                    | [[https://golang.org/x/tools/cmd/gopls][gopls]]                                     |
      | HTML                  | [[https://github.com/vscode-langservers/vscode-html-languageserver][html]]                                      |
+     | Java                  | [[https://github.com/eclipse/eclipse.jdt.ls][Eclipse JDT LS]]                            |
      | JavaScript/TypeScript | [[https://github.com/theia-ide/typescript-language-server][typescript-language-server]]  (recommended) |
+     | JavaScript/TypeScript | [[https://github.com/sourcegraph/javascript-typescript-langserver][javascript-typescript-stdio]]               |
      | JavaScript Flow       | [[https://flow.org][flow]] (add-on if working on a Flow file)   |
      | Kotlin                | [[https://github.com/fwcd/KotlinLanguageServer][kotlin-language-server]]                    |
      | PHP(recommended)      | [[https://github.com/bmewburn/vscode-intelephense][intelephense]]                              |

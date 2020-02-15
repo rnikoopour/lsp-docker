@@ -97,15 +97,17 @@
 
 
 (defvar lsp-default-clients-list
-  '((css-ls cssls-docker "css-languageserver --stdio")
-    (clangd clangd-docker "ccls")
-    (dockerfile-ls dockerfilels-docker "docker-langserver --stdio")
-    (bash-ls bashls-docker "bash-language-server start")
-    (gopls gopls-docker "gopls")
-    (pyls pyls-docker "pyls")
-    (html-ls htmls-docker "html-languageserver --stdio")
-    (ts-ls tsls-docker "typescript-language-server --stdio")
-    (jsts-ls jstsls-docker "typescript-language-server --stdio"))
+  (list
+   (list :server-id 'css-ls :docker-server-id 'cssls-docker :server-command "css-languageserver --stdio")
+   (list :server-id 'clangd :docker-server-id 'clangd-docker :server-command "ccls")
+   (list :server-id 'dockerfile-ls :docker-server-id 'dockerfilels-docker :server-command "docker-langserver --stdio")
+   (list :server-id 'bash-ls :docker-server-id 'bashls-docker :server-command "bash-language-server start")
+   (list :server-id 'gopls :docker-server-id 'gopls-docker :server-command "gopls")
+   (list :server-id 'pyls :docker-server-id 'pyls-docker :server-command "pyls")
+   (list :server-id 'html-ls :docker-server-id 'htmls-docker :server-command "html-languageserver --stdio")
+   (list :server-id 'jsts-ls :docker-server-id 'jstsls-docker :server-command "javascript-typescript-stdio")
+   (list :server-id 'ts-ls :docker-server-id 'tsls-docker :server-command "typescript-language-server --stdio")
+   (list :server-id 'tfls :docker-server-id 'tfls-docker :server-command "terraform-lsp"))
   "List of clients created when lsp-docker-init-default-clients is invoked")
 
 (cl-defun lsp-docker-init-default-clients (&key
@@ -113,16 +115,19 @@
                                            (docker-image-id "yyoncho/lsp-emacs-docker")
                                            (docker-container-name "lsp-container")
                                            (priority 10))
-  (mapcar (lambda (args) "enables clients"
-	    (lsp-docker-register-client
-	     :server-id (nth 0 args)
-	     :priority priority
-	     :docker-server-id (nth 1 args)
-	     :docker-image-id docker-image-id
-	     :docker-container-name docker-container-name
-	     :server-command (nth 2 args)
-	     :path-mappings path-mappings
-	     :launch-server-cmd-fn #'lsp-docker-launch-new-container)) lsp-default-clients-list))
+  (mapcar (lambda (client) "enables clients"
+	    (cl-destructuring-bind (&key server-id docker-server-id server-command)
+		client
+	      (lsp-docker-register-client
+	       :server-id server-id
+	       :priority priority
+	       :docker-server-id docker-server-id
+	       :docker-image-id docker-image-id
+	       :docker-container-name docker-container-name
+	       :server-command server-command
+	       :path-mappings path-mappings
+	       :launch-server-cmd-fn #'lsp-docker-launch-new-container)))
+	    lsp-default-clients-list))
 
 (provide 'lsp-docker)
 ;;; lsp-docker.el ends here
