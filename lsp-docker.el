@@ -97,14 +97,14 @@
 
 (defvar lsp-docker-default-client-packages
   '(lsp-rust lsp-go lsp-pyls lsp-clients)
-  "List of clients packages that will load when lsp-docker-init-default-clients is called")
+  "List of client packages that will load when lsp-docker-init-default-clients is called")
 
 (defvar lsp-docker-default-clients
   (list (list :server-id 'rls :docker-server-id 'rls-docker :server-command "rls")
 	(list :server-id 'gopls :docker-server-id 'gopls-docker :server-command "gopls")
 	(list :server-id 'pyls :docker-server-id 'pyls-docker :server-command "pyls")
 	(list :server-id 'clangd :docker-server-id 'clangd-docker :server-command "clangd"))
-  "List of clients to run in docker conatiners")
+  "List of clients to run in docker containers")
 
 (cl-defun lsp-docker-init-default-clients (&key
                                            path-mappings
